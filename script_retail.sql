@@ -1,75 +1,78 @@
+-- DDL - ESTRUCTURA DE TABLAS --
 
---Parte 1. DDL--
+-- Tabla clientes -- 
 
---1 Tabla clientes--
-
-CREATE TABLE Clientes (
-Clientes_id SERIAL PRIMARY KEY,
-Mail VARCHAR (50) UNIQUE NOT NULL,
-Edad INT CHECK (Edad >=18) NOT NULL
+CREATE TABLE clientes (
+cliente_id SERIAL PRIMARY KEY,
+nombre VARCHAR (50) NOT NULL,
+email VARCHAR (50) UNIQUE NOT NULL,
+edad INT CHECK ( edad >=18) NOT NULL
 );
 
--- Tabla productos -- 
-CREATE TABLE Productos (
-Productos_id SERIAL PRIMARY KEY,
-Nombre VARCHAR (50),
-Categoria VARCHAR (50),
-Stock INT CHECK (Stock>=0),
-Precio DECIMAL (10,2) NOT NULL CHECK (precio >0)
+-- Tabla productos --
+
+CREATE TABLE productos (
+producto_id SERIAL PRIMARY KEY,
+nombre VARCHAR (50) NOT NULL,
+categoria VARCHAR (50) NOT NULL,
+precio DECIMAL (10,2) CHECK (precio >0) NOT NULL,
+stock INT CHECK (stock>=0) NOT NULL
 );
 
 -- Tabla ventas -- 
-CREATE TABLE Ventas (
-Ventas_id SERIAL PRIMARY KEY,
-Clientes_id INT REFERENCES Clientes ( clientes_id),
-Productos_id INT REFERENCES Productos (Productos_id),
-Cantidad INT NOT NULL CHECK ( Cantidad>0),
-Fecha_Venta DATE NOT NULL
+
+CREATE TABLE ventas (
+venta_id SERIAL PRIMARY KEY,
+cliente_id INT REFERENCES clientes ( cliente_id) NOT NULL,
+producto_id INT REFERENCES productos ( producto_id) NOT NULL,
+cantidad INT CHECK (cantidad > 0) NOT NULL,
+fecha_venta DATE NOT NULL
 );
 
---- Parte 2. DML
 
---Tabla clientes --
+-- Parte 2 DML -- 
+
+-- Tabla clientes -- 
 
 BEGIN;
-INSERT INTO Clientes (mail, edad)
-VALUES('javier@gmail.com',38),
-('franco@gmail.com',20),
-('micaela@gmail.com',33),
-('fabian@gmail.com',57),
-('pablo@gmail.com',43);
+INSERT INTO clientes (nombre,email,edad)
+VALUES 
+('javier','javier@gmail.com',38),
+('matias','matias@gmail.com',20),
+('micaela','micaela@gmail.com',33),
+('fabian','fabian@gmail.com',57),
+('pablo','pablo@gmail.com',43);
+COMMIT ;
 
-
--- Tabla productos -- 
-
-INSERT INTO Productos (Nombre,categoria,stock,precio)
-VALUES ('Pelota','Deporte',100,'25.5'),
-('Paleta','Deporte',150,'35.00'),
-('Termo','Bazar',300,'27.50'),
-('Mate','Bazar',450,'15.50'),
-('Mouse','Computacion',20,'50')
-;
-
--- Tabla ventas --
-
-INSERT INTO Ventas ( Clientes_id,Productos_id,Cantidad,Fecha_Venta)
-VALUES (1,1,100,'2026-01-10'),
-(2,2,200,'2026-01-12'),
-(3,3,15,'2026-01-18'),
-(4,4,10,'2026-01-20'),
-(5,5,200,'2026-01-22');
-
+--Tabla productos -- 
+BEGIN;
+INSERT INTO productos (nombre,categoria,precio,stock)
+VALUES 
+('teclado','informatica',50.25,50),
+('mouse','informatica',15.50,150),
+('auriculares','informatica',20.5,175),
+('termo','bazar',75.25,200),
+('mate','bazar',40.99,250);
 COMMIT;
 
+-- Tabla ventas -- 
+BEGIN;
+INSERT INTO ventas (cliente_id,producto_id,cantidad,fecha_venta)
+VALUES 
+(1,1,25,'2026-01-10'),
+(2,2,20,'2026-01-12'),
+(3,3,15,'2026-01-18'),
+(4,4,10,'2026-01-20'),
+(5,5,100,'2026-01-22');
+COMMIT ;
 
---Paso 4- UPDATE Y DELETE--
+-- Parte 3 UPDATE / DELETE -- 
 
-UPDATE Productos
-SET precio = precio*1.10
-WHERE Categoria='Bazar'
+UPDATE productos
+SET precio = precio * 1.03
+WHERE categoria = 'bazar'
 ;
 
-DELETE FROM Ventas
-WHERE Ventas_id = 5
+DELETE FROM ventas
+WHERE fecha_venta >= '2026-01-22'
 ;
-
