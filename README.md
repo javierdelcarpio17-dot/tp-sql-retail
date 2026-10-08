@@ -17,6 +17,6 @@ y carga inicial de datos.
   claves primarias, foráneas y restricciones CHECK.
 - Carga de datos iniciales (5 registros por tabla) dentro de una
   transacción `BEGIN...COMMIT`.
-- Un `UPDATE` que aumenta un 10% el precio de los productos de
+- Un `UPDATE` que aumenta un 3% el precio de los productos de
   la categoría Bazar.
 - Un `DELETE` que elimina una venta de prueba.
